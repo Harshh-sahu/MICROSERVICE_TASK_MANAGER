@@ -1,6 +1,7 @@
-import { Avatar } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 import React, { useState } from "react";
 import "./Sidebar.css"
+import CreateNewTaskForm from "../Task/CreateTask";
 
  
 const menu = [
@@ -16,9 +17,30 @@ const menu = [
 
 const role = "ROLE_ADMIN";
  const Sidebar = () => {
-    const [activeMenu,setActiveMenu]=useState("Home")
+    const [activeMenu,setActiveMenu]=useState("DONE")
+    const [openCreateTaskForm,setOpenCreateTaskForm] = useState(false);
+    const handleCloseCreateTaskForm = () => {
+      setOpenCreateTaskForm(false);
+    };
+  
+  
+    const handleOpenCreateTaskModel = () => {
+      setOpenCreateTaskForm(true);
+      
+    };
+    const handleMenuChange=(item)=>{
+      if(item.name==="Create New Task"){
+handleOpenCreateTaskModel()
+      }
+      setActiveMenu(item.name)
+    }
+    const handleLogout=()=>{
+      console.log("HANDLE LOGOUT")
+    }
   return (
-    <div className="card min-h-[85vh] flex flex-col justify-center fixed w-[20vw]">
+
+    <>
+  <div className="card min-h-[85vh] flex flex-col justify-center fixed w-[20vw]">
       <div className="space-y-5 h-full">
         <div className="flex justify-center">
                 <Avatar
@@ -27,12 +49,18 @@ const role = "ROLE_ADMIN";
                  src='https://w0.peakpx.com/wallpaper/794/29/HD-wallpaper-best-whatsapp-dp-boy-walking-alone-birds.jpg' />
         </div>
         {
-            menu.filter((item)=>item.role.includes(role)).map((item)=><p className={`py-3 px-5 rounded-full cursor-pointer text-center ${activeMenu===item.name?"activeMenuItem":"menuItem"}`}>
+            menu.filter((item)=>item.role.includes(role)).map((item)=><p onClick={()=>handleMenuChange(item)}  className={`py-3 px-5 rounded-full cursor-pointer text-center ${activeMenu===item.name?"activeMenuItem":"menuItem"}`}>
                    {item.name}
             </p>)
         }
+        <Button onClick={handleLogout} fullWidth sx={{padding:".7rem",borderRadius:"2rem"}}  className="logoutButton" >
+          logout
+        </Button>
       </div>
     </div>
+    <CreateNewTaskForm open={openCreateTaskForm} handleClose={handleCloseCreateTaskForm}/>
+    </>
+  
   );
 };
 
